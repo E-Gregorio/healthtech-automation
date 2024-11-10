@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clínica Salud Integral</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #2c5282;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav {
+            background-color: #4299e1;
+            padding: 1rem;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        button {
+            background-color: #2c5282;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #4299e1;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 2rem;
+            width: 80%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .close {
+            float: right;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        .success-message {
+            display: none;
+            background-color: #48bb78;
+            color: white;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.25rem;
+        }
+        .precios {
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: #f7fafc;
+            border-radius: 0.25rem;
+        }
+        .resumen-cita {
+            background-color: #ebf8ff;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.25rem;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+        }
+        .tarjeta-preview {
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.25rem;
+        }
+
+        .btn-pagar {
+            background-color: #2c5282;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            position: sticky;
+            bottom: 1rem;
+            z-index: 10;
+        }
+        .btn-pagar:hover {
+            background-color: #4299e1;
+            transform: translateY(-1px);
+            transition: all 0.2s;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            background-color: #e2e8f0;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+        .success-message {
+            display: none;
+            background-color: #48bb78;
+            color: white;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-weight: bold;
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Clínica Salud Integral</h1>
+    </header>
+    <nav>
+        <a href="#inicio" id="nav-inicio">Inicio</a>
+        <a href="#servicios" id="nav-servicios">Servicios</a>
+        <a href="#citas" id="nav-citas">Reservar Cita</a>
+        <a href="#contacto" id="nav-contacto">Contacto</a>
+    </nav>
+    <div class="container">
+        <section id="citas">
+            <h2>Reservar Cita</h2>
+            <div class="precios">
+                <h3>Precios de consulta:</h3>
+                <ul>
+                    <li>Medicina General: S/. 80.00</li>
+                    <li>Pediatría: S/. 100.00</li>
+                    <li>Cardiología: S/. 150.00</li>
+                    <li>Dermatología: S/. 120.00</li>
+                </ul>
+            </div>
+            <form id="formulario-cita">
+                <div class="form-group">
+                    <label for="nombre">Nombre completo:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo electrónico:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="tel" id="telefono" name="telefono" required>
+                </div>
+                <div class="form-group">
+                    <label for="especialidad">Especialidad:</label>
+                    <select id="especialidad" name="especialidad" required>
+                        <option value="">Seleccione una especialidad</option>
+                        <option value="medicina-general" data-precio="80">Medicina General</option>
+                        <option value="pediatria" data-precio="100">Pediatría</option>
+                        <option value="cardiologia" data-precio="150">Cardiología</option>
+                        <option value="dermatologia" data-precio="120">Dermatología</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fecha">Fecha preferida:</label>
+                    <input type="date" id="fecha" name="fecha" required>
+                </div>
+                <button type="submit" id="btn-reservar">Continuar con el Pago</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Modal de Pago -->
+    <div id="modal-pago" class="modal">
+        <div class="modal-content">
+            <span class="close" id="cerrar-modal">&times;</span>
+            <h2>Pago de Consulta</h2>
+            <div class="resumen-cita" id="resumen-cita">
+                <!-- Se llenará dinámicamente -->
+            </div>
+            <form id="formulario-pago">
+                <div class="form-group">
+                    <label for="numero-tarjeta">Número de Tarjeta:</label>
+                    <input type="text" id="numero-tarjeta" maxlength="16" required 
+                           placeholder="1234 5678 9012 3456">
+                </div>
+                <div class="form-group">
+                    <label for="fecha-vencimiento">Fecha de Vencimiento:</label>
+                    <input type="text" id="fecha-vencimiento" placeholder="MM/YY" maxlength="5" required>
+                </div>
+                <div class="form-group">
+                    <label for="cvv">CVV:</label>
+                    <input type="password" id="cvv" maxlength="3" required placeholder="123">
+                </div>
+                <div class="tarjeta-preview" id="tarjeta-preview">
+                    <!-- Vista previa de la tarjeta -->
+                </div>
+                <button type="submit" id="btn-pagar" class="btn-pagar">Realizar Pago</button>
+            </form>
+            <div id="loading">Procesando pago...</div>
+        </div>
+    </div>
+
+    <div id="mensaje-exito" class="success-message">
+        ¡Su cita ha sido reservada exitosamente! Se ha enviado un correo de confirmación.
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const formularioCita = document.getElementById('formulario-cita');
+            const modalPago = document.getElementById('modal-pago');
+            const cerrarModal = document.getElementById('cerrar-modal');
+            const formularioPago = document.getElementById('formulario-pago');
+            const mensajeExito = document.getElementById('mensaje-exito');
+            const loading = document.getElementById('loading');
+
+            // Manejar el envío del formulario de pago
+            formularioPago.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Mostrar loading
+                loading.style.display = 'block';
+                const btnPagar = document.getElementById('btn-pagar');
+                btnPagar.disabled = true;
+                
+                // Simular proceso de pago
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    modalPago.style.display = 'none';
+                    mensajeExito.style.display = 'block';
+                    
+                    // Limpiar formularios
+                    formularioCita.reset();
+                    formularioPago.reset();
+                    document.getElementById('tarjeta-preview').innerHTML = '';
+                    btnPagar.disabled = false;
+                    
+                    // Ocultar mensaje de éxito después de 5 segundos
+                    setTimeout(() => {
+                        mensajeExito.style.display = 'none';
+                    }, 5000);
+                }, 2000);
+            });
+
+            // Función para obtener el precio según la especialidad
+            function obtenerPrecio(especialidad) {
+                const select = document.getElementById('especialidad');
+                const option = select.querySelector(`option[value="${especialidad}"]`);
+                return option ? option.getAttribute('data-precio') : '0';
+            }
+
+            // Mostrar resumen de la cita
+            function mostrarResumen(datosReserva) {
+                const precio = obtenerPrecio(datosReserva.especialidad);
+                const resumen = document.getElementById('resumen-cita');
+                resumen.innerHTML = `
+                    <h3>Resumen de la Cita</h3>
+                    <p><strong>Paciente:</strong> ${datosReserva.nombre}</p>
+                    <p><strong>Especialidad:</strong> ${datosReserva.especialidad}</p>
+                    <p><strong>Fecha:</strong> ${datosReserva.fecha}</p>
+                    <p><strong>Monto a pagar:</strong> S/. ${precio}</p>
+                `;
+            }
+
+            // Evento submit del formulario de cita
+            formularioCita.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const datosReserva = {
+                    nombre: document.getElementById('nombre').value,
+                    email: document.getElementById('email').value,
+                    telefono: document.getElementById('telefono').value,
+                    especialidad: document.getElementById('especialidad').value,
+                    fecha: document.getElementById('fecha').value
+                };
+                mostrarResumen(datosReserva);
+                modalPago.style.display = 'block';
+            });
+
+            // Cerrar modal
+            cerrarModal.addEventListener('click', function() {
+                modalPago.style.display = 'none';
+            });
+
+            // Vista previa de la tarjeta
+            const numeroTarjeta = document.getElementById('numero-tarjeta');
+            numeroTarjeta.addEventListener('input', function() {
+                const tarjetaPreview = document.getElementById('tarjeta-preview');
+                let numero = this.value.replace(/\s/g, '');
+                if (numero.length > 0) {
+                    numero = '**** **** **** ' + numero.slice(-4);
+                }
+                tarjetaPreview.innerHTML = `
+                    <div style="background-color: #2d3748; color: white; padding: 1rem; border-radius: 0.5rem;">
+                        <div style="font-family: monospace;">${numero || '****' + ' ****' + ' ****' + ' ****'}</div>
+                    </div>
+                `;
+            });
+
+            // Evento submit del formulario de pago
+            formularioPago.addEventListener('submit', function(e) {
+                e.preventDefault();
+                loading.style.display = 'block';
+                
+                // Simulación de proceso de pago
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    modalPago.style.display = 'none';
+                    mensajeExito.style.display = 'block';
+                    formularioCita.reset();
+                    formularioPago.reset();
+                    document.getElementById('tarjeta-preview').innerHTML = '';
+                    
+                    // Ocultar mensaje de éxito después de 5 segundos
+                    setTimeout(() => {
+                        mensajeExito.style.display = 'none';
+                    }, 5000);
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

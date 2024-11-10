@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "commonjs",
+    "strict": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./",                    // Agregado: Indica a TypeScript que las rutas parten del directorio raíz
+  },
+  "include": ["src/**/*", "tests/**/*", "pages/**/*"],  // Incluye la carpeta "pages" si está fuera de "src" o "tests"
+  "exclude": ["node_modules", "**/*.test.ts"]
+}
